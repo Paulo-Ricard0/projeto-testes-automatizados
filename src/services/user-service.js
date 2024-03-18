@@ -13,7 +13,7 @@ class UserService {
 
     static async userExistsAndCheckPassword(email, password) {
         const user = await User.findOne({ email })
-
+        
         if(!user) {
             return false
         }
