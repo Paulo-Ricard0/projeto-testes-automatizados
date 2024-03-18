@@ -11,6 +11,10 @@ const SessionServiceMock = {
 };
 
 describe("Session Controller tests", () => {
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
   test("Should return a status of 200 for a new session created", async () => {
     jest.spyOn(Email, "isValid").mockImplementationOnce(() => true);
 
@@ -72,10 +76,10 @@ describe("Session Controller tests", () => {
 
     await SessionController.create(req.userNotFound, res);
 
-    expect(userExistsAndCheckPasswordSpy).toHaveBeenCalledWith({
-      email: "any@gmail.com",
-      password: "12345",
-    });
+    expect(userExistsAndCheckPasswordSpy).toHaveBeenCalledWith(
+      "any@gmail.com",
+      "12345"
+    );
     expect(statusSpy).toHaveBeenCalledWith(404);
     expect(jsonSpy).toHaveBeenCalled();
     expect(jsonSpy).toHaveBeenCalledWith("Usuário não encontrado");
