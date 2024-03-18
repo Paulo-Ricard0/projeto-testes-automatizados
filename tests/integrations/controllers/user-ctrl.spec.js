@@ -11,6 +11,7 @@ describe("[Integration] User Controller tests", () => {
   });
 
   afterAll(async () => {
+    jest.restoreAllMocks();
     await User.deleteMany({});
     await mongoose.connection.close();
   });
@@ -23,6 +24,7 @@ describe("[Integration] User Controller tests", () => {
 
     expect(statusSpy).toHaveBeenCalledWith(200);
     expect(jsonSpy).toHaveBeenCalled();
+    expect(jsonSpy.mock.calls[0][0]).toHaveProperty("id");
   });
 
   test("Should throw status code 400 if email is invalid", async () => {
