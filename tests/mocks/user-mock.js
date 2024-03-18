@@ -20,22 +20,6 @@ exports.req = {
       password: undefined,
     },
   },
-  userNotFound: {
-    body: {
-      email: "any@gmail.com",
-      password: "12345",
-    },
-  },
-  passwordIncorrect: {
-    body: {
-      email: "paulo@gmail.com",
-      password: "teste",
-    },
-  },
-  userExists: {
-    email: "paulo@gmail.com",
-    password: "12345",
-  },
 };
 
 exports.res = {
