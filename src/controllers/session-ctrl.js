@@ -14,8 +14,8 @@ class SessionController {
             if(!password) {
                 throw { status: 400, message: 'Senha inválida'}
             }
-
-            if(!await UserService.userExistsAndCheckPassword({ email, password })) {
+            
+            if(!await UserService.userExistsAndCheckPassword( email, password )) {
                 throw { status: 404, message: 'Usuário não encontrado' }
             }
     
