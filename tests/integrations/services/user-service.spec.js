@@ -1,42 +1,40 @@
-require("dotenv").config();
-const mongoose = require("mongoose");
 const User = require("../../../src/schemas/User");
 const UserService = require("../../../src/services/user-service");
 
 describe("[Integration] User Service tests", () => {
-  beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_DB_URL);
-    await User.create({
-      name: "Paulo",
-      email: "paulo@gmail.com",
-      password: "12345",
-    });
+  afterAll(() => {
+    jest.restoreAllMocks();
   });
 
-  afterEach(async () => {
-    jest.clearAllMocks();
-  });
+  test("should return true if user exists and password matches", async () => {
+    const mockUser = { email: "paulo@gmail.com", password: "12345" };
+    jest.spyOn(User, "findOne").mockResolvedValue(mockUser);
 
-  afterAll(async () => {
-    await User.deleteMany({});
-    await mongoose.connection.close();
-  });
-
-  test("Should return true if user exists", async () => {
-    const userExists = await UserService.userExistsAndCheckPassword(
-      "paulo@gmail.com",
-      "12345"
+    const result = await UserService.userExistsAndCheckPassword(
+      mockUser.email,
+      mockUser.password
     );
 
-    expect(userExists).toBe(true);
+    expect(result).toBe(true);
   });
 
   test("Should return false if the user does not exist", async () => {
-    const userExists = await UserService.userExistsAndCheckPassword(
+    jest.spyOn(User, "findOne").mockResolvedValue(null);
+
+    const result = await UserService.userExistsAndCheckPassword(
       "any@gmail.com",
-      "12345"
+      "password123"
     );
 
-    expect(userExists).toBe(false);
+    expect(result).toBe(false);
+  });
+
+  test("should throw an error if password does not match", async () => {
+    const mockUser = { email: "paulo@gmail.com", password: "12345" };
+    jest.spyOn(User, "findOne").mockResolvedValue(mockUser);
+
+    await expect(
+      UserService.userExistsAndCheckPassword(mockUser.email, "password123")
+    ).rejects.toEqual({ status: 400, message: "As senhas não batem" });
   });
 });
