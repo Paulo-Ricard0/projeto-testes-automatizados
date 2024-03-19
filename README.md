@@ -58,7 +58,7 @@ SECRET_KEY=
 MONGO_DB_URL=
 ```
 
-4. Instale as Dependências necessárias para rodar o projeto:
+4. Instale as Dependências necessárias para rodar o projeto, execute o seguinte comando:
 ```bash
 npm install
 ```
